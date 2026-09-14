@@ -1,9 +1,8 @@
 /* =========================================
    MOBILE MENU
 ========================================= */
-
 const menuBtn = document.getElementById("menuBtn");
-const nav = document.getElementById("nav");
+const nav = document.getElementById("navMenu");
 
 if (menuBtn && nav) {
 
@@ -14,7 +13,6 @@ if (menuBtn && nav) {
     });
 
 }
-
 
 /* =========================================
    CLOSE MOBILE MENU
