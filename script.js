@@ -1,8 +1,10 @@
 /* =========================================
    MOBILE MENU
 ========================================= */
+
 const menuBtn = document.getElementById("menuBtn");
-const nav = document.getElementById("navMenu");
+const nav = document.getElementById("nav");
+
 
 if (menuBtn && nav) {
 
@@ -10,9 +12,30 @@ if (menuBtn && nav) {
 
         nav.classList.toggle("open");
 
+        menuBtn.classList.toggle("open");
+
+
+        const isOpen =
+            nav.classList.contains("open");
+
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            isOpen
+        );
+
+
+        menuBtn.setAttribute(
+            "aria-label",
+            isOpen
+                ? "Close navigation menu"
+                : "Open navigation menu"
+        );
+
     });
 
 }
+
 
 /* =========================================
    CLOSE MOBILE MENU
@@ -23,7 +46,25 @@ document.querySelectorAll("nav a").forEach((link) => {
     link.addEventListener("click", () => {
 
         if (nav) {
+
             nav.classList.remove("open");
+
+        }
+
+        if (menuBtn) {
+
+            menuBtn.classList.remove("open");
+
+            menuBtn.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+            menuBtn.setAttribute(
+                "aria-label",
+                "Open navigation menu"
+            );
+
         }
 
     });
@@ -32,14 +73,54 @@ document.querySelectorAll("nav a").forEach((link) => {
 
 
 /* =========================================
+   CLOSE MENU WHEN CLICKING OUTSIDE
+========================================= */
+
+document.addEventListener("click", (event) => {
+
+    if (!nav || !menuBtn) {
+        return;
+    }
+
+
+    const clickedInsideNav =
+        nav.contains(event.target);
+
+    const clickedMenuButton =
+        menuBtn.contains(event.target);
+
+
+    if (
+        !clickedInsideNav &&
+        !clickedMenuButton
+    ) {
+
+        nav.classList.remove("open");
+
+        menuBtn.classList.remove("open");
+
+        menuBtn.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+});
+
+
+/* =========================================
    CURRENT YEAR
 ========================================= */
 
-const year = document.getElementById("year");
+const year =
+    document.getElementById("year");
+
 
 if (year) {
 
-    year.textContent = new Date().getFullYear();
+    year.textContent =
+        new Date().getFullYear();
 
 }
 
@@ -48,7 +129,9 @@ if (year) {
    TYPING EFFECT
 ========================================= */
 
-const typingText = document.getElementById("typingText");
+const typingText =
+    document.getElementById("typingText");
+
 
 const words = [
     "Java",
@@ -57,7 +140,9 @@ const words = [
     "Database"
 ];
 
+
 let wordIndex = 0;
+
 let charIndex = 0;
 
 let deleting = false;
@@ -70,31 +155,46 @@ function typeEffect() {
     }
 
 
-    const currentWord = words[wordIndex];
+    const currentWord =
+        words[wordIndex];
 
 
     if (!deleting) {
 
         typingText.textContent =
-            currentWord.substring(0, charIndex + 1);
+            currentWord.substring(
+                0,
+                charIndex + 1
+            );
 
         charIndex++;
 
 
-        if (charIndex === currentWord.length) {
+        if (
+            charIndex ===
+            currentWord.length
+        ) {
 
             deleting = true;
 
-            setTimeout(typeEffect, 1300);
+            setTimeout(
+                typeEffect,
+                1300
+            );
 
             return;
+
         }
 
+    }
 
-    } else {
+    else {
 
         typingText.textContent =
-            currentWord.substring(0, charIndex - 1);
+            currentWord.substring(
+                0,
+                charIndex - 1
+            );
 
         charIndex--;
 
@@ -105,8 +205,14 @@ function typeEffect() {
 
             wordIndex++;
 
-            if (wordIndex >= words.length) {
+
+            if (
+                wordIndex >=
+                words.length
+            ) {
+
                 wordIndex = 0;
+
             }
 
         }
@@ -114,9 +220,16 @@ function typeEffect() {
     }
 
 
-    const speed = deleting ? 55 : 100;
+    const speed =
+        deleting
+            ? 55
+            : 100;
 
-    setTimeout(typeEffect, speed);
+
+    setTimeout(
+        typeEffect,
+        speed
+    );
 
 }
 
@@ -128,27 +241,37 @@ typeEffect();
    NAVBAR SCROLL EFFECT
 ========================================= */
 
-const navbar = document.querySelector(".navbar");
+const navbar =
+    document.querySelector(".navbar");
 
 
-window.addEventListener("scroll", () => {
+window.addEventListener(
+    "scroll",
+    () => {
 
-    if (!navbar) {
-        return;
+        if (!navbar) {
+            return;
+        }
+
+
+        if (window.scrollY > 40) {
+
+            navbar.classList.add(
+                "scrolled"
+            );
+
+        }
+
+        else {
+
+            navbar.classList.remove(
+                "scrolled"
+            );
+
+        }
+
     }
-
-
-    if (window.scrollY > 40) {
-
-        navbar.classList.add("scrolled");
-
-    } else {
-
-        navbar.classList.remove("scrolled");
-
-    }
-
-});
+);
 
 
 /* =========================================
@@ -156,42 +279,73 @@ window.addEventListener("scroll", () => {
 ========================================= */
 
 const revealElements =
-    document.querySelectorAll(".reveal");
-
-
-const revealObserver =
-    new IntersectionObserver(
-
-        (entries) => {
-
-            entries.forEach((entry) => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.classList.add("visible");
-
-                    revealObserver.unobserve(
-                        entry.target
-                    );
-
-                }
-
-            });
-
-        },
-
-        {
-            threshold: 0.12
-        }
-
+    document.querySelectorAll(
+        ".reveal"
     );
 
 
-revealElements.forEach((element) => {
+if ("IntersectionObserver" in window) {
 
-    revealObserver.observe(element);
+    const revealObserver =
+        new IntersectionObserver(
 
-});
+            (entries) => {
+
+                entries.forEach(
+                    (entry) => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            entry.target.classList.add(
+                                "visible"
+                            );
+
+
+                            revealObserver.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    }
+                );
+
+            },
+
+            {
+                threshold: 0.12
+            }
+
+        );
+
+
+    revealElements.forEach(
+        (element) => {
+
+            revealObserver.observe(
+                element
+            );
+
+        }
+    );
+
+}
+
+else {
+
+    revealElements.forEach(
+        (element) => {
+
+            element.classList.add(
+                "visible"
+            );
+
+        }
+    );
+
+}
 
 
 /* =========================================
@@ -199,10 +353,14 @@ revealElements.forEach((element) => {
 ========================================= */
 
 const backToTop =
-    document.createElement("button");
+    document.createElement(
+        "button"
+    );
 
 
-backToTop.className = "back-to-top";
+backToTop.className =
+    "back-to-top";
+
 
 backToTop.setAttribute(
     "aria-label",
@@ -214,39 +372,55 @@ backToTop.innerHTML =
     '<i class="fas fa-arrow-up"></i>';
 
 
-document.body.appendChild(backToTop);
+document.body.appendChild(
+    backToTop
+);
 
 
-window.addEventListener("scroll", () => {
+window.addEventListener(
+    "scroll",
+    () => {
 
-    if (window.scrollY > 500) {
+        if (
+            window.scrollY > 500
+        ) {
 
-        backToTop.classList.add("show");
+            backToTop.classList.add(
+                "show"
+            );
 
-    } else {
+        }
 
-        backToTop.classList.remove("show");
+        else {
+
+            backToTop.classList.remove(
+                "show"
+            );
+
+        }
 
     }
+);
 
-});
 
+backToTop.addEventListener(
+    "click",
+    () => {
 
-backToTop.addEventListener("click", () => {
+        window.scrollTo({
 
-    window.scrollTo({
+            top: 0,
 
-        top: 0,
+            behavior: "smooth"
 
-        behavior: "smooth"
+        });
 
-    });
-
-});
+    }
+);
 
 
 /* =========================================
-   PROJECT / CARD STAGGER ANIMATION
+   CARD STAGGER ANIMATION
 ========================================= */
 
 const cards =
@@ -255,9 +429,11 @@ const cards =
     );
 
 
-cards.forEach((card, index) => {
+cards.forEach(
+    (card, index) => {
 
-    card.style.transitionDelay =
-        `${index * 100}ms`;
+        card.style.transitionDelay =
+            `${index * 100}ms`;
 
-});
+    }
+);
